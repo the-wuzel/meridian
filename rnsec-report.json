@@ -1,0 +1,17 @@
+{
+  "findings": [
+    {
+      "ruleId": "SENSITIVE_DATA_IN_ERROR_MESSAGES",
+      "description": "Error object logged directly - may contain sensitive data or stack traces",
+      "severity": "MEDIUM",
+      "filePath": "/home/thomas/Documents/Codes/mindApp/app/(tabs)/memories.tsx",
+      "line": 90,
+      "snippet": "            setMemories(combined);\n        } catch (error) {\n            console.error(\"Failed to delete item:\", error);\n            Alert.alert(\"Error\", \"Failed to delete item.\");\n        } finally {",
+      "suggestion": "Log only safe error properties (message, code). Sanitize error messages before displaying to users. Never expose stack traces in production."
+    }
+  ],
+  "scannedFiles": 32,
+  "duration": 1726,
+  "timestamp": "2026-03-09T22:22:10.332Z",
+  "ignoredRules": []
+}

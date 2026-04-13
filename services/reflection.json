@@ -1,0 +1,162 @@
+[
+    {
+        "prompt": "Which was the last restaurant you've been to?",
+        "categories": [
+            "experiences"
+        ]
+    },
+    {
+        "prompt": "What was the last book you've read?",
+        "categories": [
+            "experiences"
+        ]
+    },
+    {
+        "prompt": "What music you can't get out of your head recently?",
+        "categories": [
+            "experiences"
+        ]
+    },
+    {
+        "prompt": "What was the last movie you've watched?",
+        "categories": [
+            "experiences"
+        ]
+    },
+    {
+        "prompt": "When was the last time you've been to a party? Do you think you should be going to more, less, or is it good?",
+        "categories": [
+            "experiences"
+        ]
+    },
+    {
+        "prompt": "When was the last time you've helped someone?",
+        "categories": [
+            "experiences"
+        ]
+    },
+    {
+        "prompt": "What do you think is a scam?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "What do you think you should be doing more of?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "What is one characteristic that you admire in others?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "Do you like your current job? Why?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "How is your social media usage? How long do you spend on it each day? What are the ones you spend the most time on?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "When are you the happiest?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "When are you the most productive?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "If you could change something today, what would it be?",
+        "categories": [
+            ""
+        ]
+    },
+
+
+
+
+    {
+        "prompt": "How often do you drink / smoke? What do you think about it?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "What superpower would you like to have? Why?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "What is a child memory you hold dear?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "What is your proudest accomplishment?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "Where would you like to travel to, if you could go anywhere?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "\"If someone gains, someone else loses.\" Do you agree? ",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "What are you saving money for?",
+        "categories": [
+            ""
+        ]
+    },
+    {
+        "prompt": "What is your favorite virtue?",
+        "categories": [
+            "proust-questionaire"
+        ]
+    },
+    {
+        "prompt": "What is your main fault?",
+        "categories": [
+            "proust-questionaire"
+        ]
+    },
+    {
+        "prompt": "What is your favorite occupation?",
+        "categories": [
+            "proust-questionaire"
+        ]
+    },
+    {
+        "prompt": "What do you appreciate most in your friends?",
+        "categories": [
+            "proust-questionaire"
+        ]
+    },
+    {
+        "prompt": "Where would you like to live?",
+        "categories": [
+            "proust-questionaire"
+        ]
+    }
+]
