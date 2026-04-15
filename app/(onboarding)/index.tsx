@@ -3,14 +3,14 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { saveSetting } from '@/services/database';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Image } from 'expo-image';
 import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const Dot = ({ index, currentStep, themeColors }: { index: number, currentStep: number, themeColors: any }) => {
   const isActive = index === currentStep;
@@ -32,17 +32,17 @@ const ONBOARDING_STEPS = [
   {
     title: 'Welcome to mindApp',
     subtitle: 'Your personal space for reflection, tracking routines, and building better habits.',
-    image: require('@/assets/images/icon.png'),
+    image: require('@/assets/images/icon_png.png'),
   },
   {
     title: 'Morning Routine',
     subtitle: 'Start your day right. Enter the app once every morning to set your intentions and prepare for the day ahead.',
-    image: require('@/assets/images/home_cut.jpeg'),
+    image: require('@/assets/images/home2_cut.png'),
   },
   {
     title: 'Evening Routine',
     subtitle: 'Reflect on your progress. Check in once every evening to log your day, clear your mind, and wind down.',
-    image: require('@/assets/images/memories_cut.jpeg'),
+    image: require('@/assets/images/memories2_cut.png'),
   },
   {
     title: 'Make it Yours',
@@ -173,9 +173,9 @@ const styles = StyleSheet.create({
     marginTop: 60,
   },
   image: {
-    width: width * 0.7,
-    height: width * 0.7,
-    maxHeight: 280,
+    width: width * 0.85,
+    height: height * 0.7
+    // maxHeight: 350,
   },
   textContainer: {
     justifyContent: 'flex-end',
