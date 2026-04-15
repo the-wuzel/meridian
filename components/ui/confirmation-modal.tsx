@@ -15,6 +15,7 @@ interface ConfirmationModalProps {
     confirmText?: string;
     cancelText?: string;
     isAlert?: boolean;
+    confirmButtonColor?: string;
 }
 
 export function ConfirmationModal({
@@ -25,7 +26,8 @@ export function ConfirmationModal({
     message,
     confirmText = "Delete",
     cancelText = "Cancel",
-    isAlert = false
+    isAlert = false,
+    confirmButtonColor
 }: ConfirmationModalProps) {
     const colorScheme = useColorScheme() ?? 'light';
     const backgroundColor = useThemeColor({}, 'background');
@@ -57,7 +59,11 @@ export function ConfirmationModal({
                                 )}
 
                                 <TouchableOpacity
-                                    style={[styles.button, isAlert ? styles.alertButton : styles.confirmButton]}
+                                    style={[
+                                        styles.button, 
+                                        isAlert ? styles.alertButton : styles.confirmButton,
+                                        confirmButtonColor ? { backgroundColor: confirmButtonColor } : null
+                                    ]}
                                     onPress={onConfirm}
                                 >
                                     <ThemedText style={styles.textStyle}>{confirmText}</ThemedText>

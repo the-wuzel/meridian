@@ -1,6 +1,8 @@
 import { ColorPalette } from '@/constants/theme';
 import { getAllSettings, saveSetting } from '@/services/database';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Platform } from 'react-native';
+import * as Notifications from 'expo-notifications';
 
 export type Preferences = {
     showDailyQuote: boolean;
@@ -35,10 +37,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         showEveningReflection: true,
         showDailyGratitude: true,
         primaryColorIndex: 0,
-        morningNotificationEnabled: true,
+        morningNotificationEnabled: false,
         morningNotificationHour: 7,
         morningNotificationMinute: 0,
-        eveningNotificationEnabled: true,
+        eveningNotificationEnabled: false,
         eveningNotificationHour: 18,
         eveningNotificationMinute: 0,
         isDarkMode: false,
@@ -54,16 +56,27 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const loadSettings = async () => {
         try {
             const settings = await getAllSettings();
+            
+            let notificationsAllowed = false;
+            if (Platform.OS !== 'web') {
+                try {
+                    const { status } = await Notifications.getPermissionsAsync();
+                    notificationsAllowed = status === 'granted';
+                } catch (e) {
+                    console.error('Failed to get notification permissions', e);
+                }
+            }
+
             setPreferences({
                 showDailyQuote: settings.setting_dailyQuote ?? true,
                 showMorningRoutine: settings.setting_morningRoutine ?? true,
                 showEveningReflection: settings.setting_eveningReflection ?? true,
                 showDailyGratitude: settings.setting_dailyGratitude ?? true,
                 primaryColorIndex: settings.setting_primaryColorIndex ?? 0,
-                morningNotificationEnabled: settings.setting_morningNotificationEnabled ?? true,
+                morningNotificationEnabled: notificationsAllowed ? (settings.setting_morningNotificationEnabled ?? false) : false,
                 morningNotificationHour: settings.setting_morningNotificationHour ?? 7,
                 morningNotificationMinute: settings.setting_morningNotificationMinute ?? 0,
-                eveningNotificationEnabled: settings.setting_eveningNotificationEnabled ?? true,
+                eveningNotificationEnabled: notificationsAllowed ? (settings.setting_eveningNotificationEnabled ?? false) : false,
                 eveningNotificationHour: settings.setting_eveningNotificationHour ?? 18,
                 eveningNotificationMinute: settings.setting_eveningNotificationMinute ?? 0,
                 isDarkMode: settings.setting_isDarkMode ?? false,

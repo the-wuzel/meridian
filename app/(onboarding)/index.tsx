@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
     marginTop: 60,
   },
   image: {
-    width: width * 0.85,
     height: height * 0.7
     // maxHeight: 350,
   },

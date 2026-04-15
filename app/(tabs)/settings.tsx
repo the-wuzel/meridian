@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Linking, Platform, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -11,8 +11,9 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { CustomTimePicker } from '@/components/ui/CustomTimePicker';
 import { router } from 'expo-router';
 import { exportDatabase, importDatabase } from '@/services/database';
-import { Alert } from 'react-native';
+import { ConfirmationModal } from '@/components/ui/confirmation-modal';
 import { CustomSwitch } from '@/components/CustomSwitch';
+import * as Notifications from 'expo-notifications';
 
 export default function SettingsScreen() {
     const { preferences, updatePreference, primaryColor } = useSettings();
@@ -59,11 +60,96 @@ export default function SettingsScreen() {
 
     const [showMorningPicker, setShowMorningPicker] = useState(false);
     const [showEveningPicker, setShowEveningPicker] = useState(false);
+    const [modalConfig, setModalConfig] = useState<{
+        visible: boolean;
+        title: string;
+        message: string;
+        isAlert: boolean;
+        confirmText: string;
+        cancelText?: string;
+        confirmButtonColor?: string;
+        onConfirm: () => void;
+        onClose: () => void;
+    }>({
+        visible: false,
+        title: '',
+        message: '',
+        isAlert: true,
+        confirmText: 'OK',
+        onConfirm: () => {},
+        onClose: () => {},
+    });
+
+    const hideModal = () => setModalConfig(prev => ({ ...prev, visible: false }));
+
+    const showAlert = (title: string, message: string) => {
+        setModalConfig({
+            visible: true,
+            title,
+            message,
+            isAlert: true,
+            confirmText: 'OK',
+            onConfirm: hideModal,
+            onClose: hideModal,
+        });
+    };
+
+    const showConfirm = (title: string, message: string, confirmText: string, onConfirm: () => void, confirmButtonColor?: string) => {
+        setModalConfig({
+            visible: true,
+            title,
+            message,
+            isAlert: false,
+            confirmText,
+            cancelText: 'Cancel',
+            confirmButtonColor,
+            onConfirm: () => {
+                hideModal();
+                onConfirm();
+            },
+            onClose: hideModal,
+        });
+    };
 
     const formatTime = (hour: number, minute: number) => {
         const d = new Date();
         d.setHours(hour, minute);
         return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
+    const handleNotificationToggle = async (type: 'morning' | 'evening', value: boolean) => {
+        if (value && Platform.OS !== 'web') {
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync({
+                    ios: {
+                        allowAlert: true,
+                        allowBadge: true,
+                        allowSound: true,
+                    },
+                });
+                finalStatus = status;
+            }
+
+            if (finalStatus !== 'granted') {
+                showConfirm(
+                    "Permission Required",
+                    "Please allow notifications in your device settings to receive reminders.",
+                    "Open Settings",
+                    () => Linking.openSettings(),
+                    primaryColor
+                );
+                return;
+            }
+        }
+        
+        if (type === 'morning') {
+            updatePreference('morningNotificationEnabled', value);
+        } else {
+            updatePreference('eveningNotificationEnabled', value);
+        }
     };
 
     const getMorningDate = () => {
@@ -313,7 +399,7 @@ export default function SettingsScreen() {
                                 <TouchableOpacity
                                     style={styles.row}
                                     activeOpacity={0.7}
-                                    onPress={() => updatePreference('morningNotificationEnabled', !morningNotificationEnabled)}
+                                    onPress={() => handleNotificationToggle('morning', !morningNotificationEnabled)}
                                 >
                                     <View>
                                         <ThemedText style={styles.label}>Morning Reminder</ThemedText>
@@ -323,7 +409,7 @@ export default function SettingsScreen() {
                                         trackColor={trackColor}
                                         thumbColor={activeThumbColor}
                                         ios_backgroundColor={iosBackgroundColor}
-                                        onValueChange={(val) => updatePreference('morningNotificationEnabled', val)}
+                                        onValueChange={(val) => handleNotificationToggle('morning', val)}
                                         value={morningNotificationEnabled}
                                     />
                                 </TouchableOpacity>
@@ -343,7 +429,7 @@ export default function SettingsScreen() {
                                 <TouchableOpacity
                                     style={styles.row}
                                     activeOpacity={0.7}
-                                    onPress={() => updatePreference('eveningNotificationEnabled', !eveningNotificationEnabled)}
+                                    onPress={() => handleNotificationToggle('evening', !eveningNotificationEnabled)}
                                 >
                                     <View>
                                         <ThemedText style={styles.label}>Evening Reminder</ThemedText>
@@ -353,7 +439,7 @@ export default function SettingsScreen() {
                                         trackColor={trackColor}
                                         thumbColor={activeThumbColor}
                                         ios_backgroundColor={iosBackgroundColor}
-                                        onValueChange={(val) => updatePreference('eveningNotificationEnabled', val)}
+                                        onValueChange={(val) => handleNotificationToggle('evening', val)}
                                         value={eveningNotificationEnabled}
                                     />
                                 </TouchableOpacity>
@@ -380,7 +466,7 @@ export default function SettingsScreen() {
                                     onPress={async () => {
                                         const success = await exportDatabase();
                                         if (!success) {
-                                            Alert.alert("Error", "Could not export database. Sharing might not be available.");
+                                            showAlert("Error", "Could not export database. Sharing might not be available.");
                                         }
                                     }}
                                 >
@@ -396,24 +482,18 @@ export default function SettingsScreen() {
                                     style={styles.row}
                                     activeOpacity={0.7}
                                     onPress={() => {
-                                        Alert.alert(
+                                        showConfirm(
                                             "Import Backup",
                                             "This will overwrite all current data. Are you sure you want to proceed?",
-                                            [
-                                                { text: "Cancel", style: "cancel" },
-                                                { 
-                                                    text: "Import", 
-                                                    style: "destructive",
-                                                    onPress: async () => {
-                                                        const success = await importDatabase();
-                                                        if (success) {
-                                                            Alert.alert("Success", "Database imported successfully. Please completely close and restart the app to see the changes.");
-                                                        } else {
-                                                            Alert.alert("Error", "Could not import database. Make sure you selected a valid backup file.");
-                                                        }
-                                                    } 
+                                            "Import",
+                                            async () => {
+                                                const success = await importDatabase();
+                                                if (success) {
+                                                    showAlert("Success", "Database imported successfully. Please completely close and restart the app to see the changes.");
+                                                } else {
+                                                    showAlert("Error", "Could not import database. Make sure you selected a valid backup file.");
                                                 }
-                                            ]
+                                            }
                                         );
                                     }}
                                 >
@@ -447,6 +527,17 @@ export default function SettingsScreen() {
                     }}
                     initialDate={getEveningDate()}
                     title="Evening Reminder"
+                />
+                <ConfirmationModal
+                    visible={modalConfig.visible}
+                    title={modalConfig.title}
+                    message={modalConfig.message}
+                    isAlert={modalConfig.isAlert}
+                    confirmText={modalConfig.confirmText}
+                    cancelText={modalConfig.cancelText}
+                    confirmButtonColor={modalConfig.confirmButtonColor}
+                    onConfirm={modalConfig.onConfirm}
+                    onClose={modalConfig.onClose}
                 />
             </SafeAreaView>
         </ThemedView>
