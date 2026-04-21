@@ -20,7 +20,7 @@ mindApp is a mindfulness and journaling application built with React Native and 
 - **Navigation**: Expo Router (file-based routing)
 - **Data & Storage**: `expo-sqlite`, `expo-secure-store`, `@react-native-async-storage/async-storage`
 - **Security**: `expo-local-authentication`
-- **UI & Animations**: `react-native-reanimated`, `react-native-gesture-handler`, `react-native-draggable-flatlist`
+- **UI & Animations**: `react-native-reanimated`, `react-native-gesture-handler`, `react-native-reorderable-list`
 - **Icons**: `@expo/vector-icons`
 
 ## Project Structure
