@@ -1,6 +1,6 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { KeyboardAvoidingView, LayoutAnimation, Platform, TextInput, TouchableOpacity, UIManager, View, findNodeHandle } from 'react-native';
+import { KeyboardAvoidingView, LayoutAnimation, Platform, ScrollView, TextInput, TouchableOpacity, UIManager, View, findNodeHandle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -11,7 +11,7 @@ import { Colors } from '@/constants/theme';
 import { useSettings } from '@/context/SettingsContext';
 import { useSnackbar } from '@/context/SnackbarContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams, ScaleDecorator } from 'react-native-draggable-flatlist';
+import ReorderableList, { reorderItems, useReorderableDrag } from 'react-native-reorderable-list';
 import { createStyles } from './_index.styles';
 
 import { Reflection, deleteGratitude, forceNewDailyPrompt, getDailyPrompt, getDailyQuote, getMorningRoutineItems, getPastReflectionsByPrompt, getTodayGratitudes, getTodayReflection, isQuoteSaved, removeSavedQuote, saveGratitude, saveQuote, saveReflection, syncMorningRoutineItems, updateGratitude, updateMorningRoutineItemStatus } from '@/services/database';
@@ -84,6 +84,44 @@ interface RoutineItem {
   id: number;
   label: string;
   checked: boolean;
+}
+
+function RoutineEditItem({ item, updateEditItem, removeEditItem, colors }: {
+  item: RoutineItem;
+  updateEditItem: (id: number, text: string) => void;
+  removeEditItem: (id: number) => void;
+  colors: any;
+}) {
+  const drag = useReorderableDrag();
+  return (
+    <View style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 10,
+    }}>
+      <TouchableOpacity onPressIn={drag} style={{ paddingRight: 10 }}>
+        <IconSymbol name="line.3.horizontal" size={24} color={colors.iconTertiary} />
+      </TouchableOpacity>
+      <TextInput
+        style={{
+          flex: 1,
+          borderBottomWidth: 1,
+          borderBottomColor: colors.cardBorder,
+          paddingVertical: 8,
+          color: colors.text,
+          fontSize: 16,
+          marginRight: 10
+        }}
+        value={item.label}
+        onChangeText={(text) => updateEditItem(item.id, text)}
+        placeholder="Routine item..."
+        placeholderTextColor={colors.textTertiary}
+      />
+      <TouchableOpacity onPress={() => removeEditItem(item.id)}>
+        <IconSymbol name="trash.fill" size={20} color={colors.deleteIcon} />
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 function MorningRoutine() {
@@ -173,40 +211,14 @@ function MorningRoutine() {
     setEditItems(items => items.filter(i => i.id !== id));
   };
 
-  const renderItem = useCallback(({ item, drag, isActive }: RenderItemParams<RoutineItem>) => {
-    return (
-      <ScaleDecorator>
-        <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: 10,
-          opacity: isActive ? 0.8 : 1
-        }}>
-          <TouchableOpacity onPressIn={drag} disabled={isActive} style={{ paddingRight: 10 }}>
-            <IconSymbol name="line.3.horizontal" size={24} color={colors.iconTertiary} />
-          </TouchableOpacity>
-          <TextInput
-            style={{
-              flex: 1,
-              borderBottomWidth: 1,
-              borderBottomColor: colors.cardBorder,
-              paddingVertical: 8,
-              color: colors.text,
-              fontSize: 16,
-              marginRight: 10
-            }}
-            value={item.label}
-            onChangeText={(text) => updateEditItem(item.id, text)}
-            placeholder="Routine item..."
-            placeholderTextColor={colors.textTertiary}
-          />
-          <TouchableOpacity onPress={() => removeEditItem(item.id)}>
-            <IconSymbol name="trash.fill" size={20} color={colors.deleteIcon} />
-          </TouchableOpacity>
-        </View>
-      </ScaleDecorator>
-    );
-  }, [colors, updateEditItem, removeEditItem]);
+  const renderItem = useCallback(({ item }: { item: RoutineItem }) => (
+    <RoutineEditItem
+      item={item}
+      updateEditItem={updateEditItem}
+      removeEditItem={removeEditItem}
+      colors={colors}
+    />
+  ), [colors, updateEditItem, removeEditItem]);
 
   return (
     <ThemedView style={styles.routineContainer}>
@@ -224,12 +236,15 @@ function MorningRoutine() {
       </View>
 
       {isEditing ? (
-        <View style={{ height: 300 }}>
-          <NestableDraggableFlatList
+        <View>
+          <ReorderableList
             data={editItems}
-            onDragEnd={({ data }) => setEditItems(data)}
-            keyExtractor={(item) => item.id.toString()}
+            onReorder={({ from, to }) => {
+              setEditItems(reorderItems(editItems, from, to));
+            }}
+            keyExtractor={(item: RoutineItem) => item.id.toString()}
             renderItem={renderItem}
+            scrollEnabled={false}
             ListFooterComponent={
               <TouchableOpacity
                 style={{
@@ -660,7 +675,7 @@ export default function HomeScreen() {
           style={{ flex: 1 }}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
         >
-          <NestableScrollContainer
+          <ScrollView
             ref={scrollRef}
             contentContainerStyle={{ paddingBottom: 40 }}
             keyboardShouldPersistTaps="handled"
@@ -690,7 +705,7 @@ export default function HomeScreen() {
                 <ThemedText style={{ textAlign: 'center', marginTop: 40, opacity: 0.6 }}>No morning activities enabled.</ThemedText>
               )}
             </View>
-          </NestableScrollContainer>
+          </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </ThemedView>
