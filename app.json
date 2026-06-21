@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "mindApp",
-    "slug": "mindApp",
+    "name": "Meridian",
+    "slug": "meridian",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "mindapp",
+    "scheme": "meridian",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.mindApp"
+      "bundleIdentifier": "com.anonymous.meridian"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +21,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.mindApp"
+      "package": "com.anonymous.meridian"
     },
     "web": {
       "output": "static",

@@ -1,6 +1,6 @@
-# mindApp (*name TDB*)
+# Meridian 
 
-mindApp is a mindfulness and journaling application built with React Native and Expo. It helps you practice daily gratitude and evening reflections, keeping your thoughts secure and accessible only to you.
+Meridian is a mindfulness and journaling application built with React Native and Expo. It helps you practice daily gratitude and evening reflections, keeping your thoughts secure and accessible only to you.
 
 ## Features
 

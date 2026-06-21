@@ -5,7 +5,7 @@ let dbPromise: Promise<SQLite.SQLiteDatabase> | null = null;
 
 const getDb = async (): Promise<SQLite.SQLiteDatabase> => {
     if (!dbPromise) {
-        dbPromise = SQLite.openDatabaseAsync('mindApp.db');
+        dbPromise = SQLite.openDatabaseAsync('database.db');
     }
     return dbPromise;
 };
@@ -397,7 +397,7 @@ export const exportDatabase = async () => {
             dbFile = new File(dbUri);
         } else {
             // Fallback
-            dbFile = new File(Paths.document, 'SQLite', 'mindApp.db');
+            dbFile = new File(Paths.document, 'SQLite', 'database.db');
         }
 
         if (!dbFile.exists) {
@@ -406,7 +406,7 @@ export const exportDatabase = async () => {
         }
 
         // Copy it to a temporary location to ensure it has a good name and is accessible
-        const backupFileName = `mindApp_backup_${new Date().toISOString().split('T')[0]}.db`;
+        const backupFileName = `database_backup_${new Date().toISOString().split('T')[0]}.db`;
         const backupFile = new File(Paths.cache, backupFileName);
         
         // If there's an old backup, overwrite by copying? 
@@ -461,7 +461,7 @@ export const importDatabase = async () => {
             dbFile = new File(dbUri);
         } else {
             // Fallback
-            dbFile = new File(Paths.document, 'SQLite', 'mindApp.db');
+            dbFile = new File(Paths.document, 'SQLite', 'database.db');
         }
 
         // Close the database to release the file lock

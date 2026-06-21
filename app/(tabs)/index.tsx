@@ -12,7 +12,7 @@ import { useSettings } from '@/context/SettingsContext';
 import { useSnackbar } from '@/context/SnackbarContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import ReorderableList, { reorderItems, useReorderableDrag } from 'react-native-reorderable-list';
-import { createStyles } from './_index.styles';
+import { createStyles } from '../../styles/index.styles';
 
 import { Reflection, deleteGratitude, forceNewDailyPrompt, getDailyPrompt, getDailyQuote, getMorningRoutineItems, getPastReflectionsByPrompt, getTodayGratitudes, getTodayReflection, isQuoteSaved, removeSavedQuote, saveGratitude, saveQuote, saveReflection, syncMorningRoutineItems, updateGratitude, updateMorningRoutineItemStatus } from '@/services/database';
 import reflectionsData from '@/services/reflection.json';

@@ -30,9 +30,10 @@ const Dot = ({ index, currentStep, themeColors }: { index: number, currentStep: 
 
 const ONBOARDING_STEPS = [
   {
-    title: 'Welcome to mindApp',
+    title: 'Welcome to Meridian',
     subtitle: 'Your personal space for reflection, tracking routines, and building better habits.',
     image: require('@/assets/images/icon_png.png'),
+    imageStyle: { width: '80%', height: height * 0.5 },
   },
   {
     title: 'Morning Routine',
@@ -47,7 +48,8 @@ const ONBOARDING_STEPS = [
   {
     title: 'Make it Yours',
     subtitle: 'What should we call you? We will use this to personalize your experience.',
-    image: require('@/assets/images/icon.png'),
+    image: require('@/assets/images/icon_png.png'),
+    imageStyle: { width: '80%', height: height * 0.5 },
     isInput: true,
   },
 ];
@@ -100,7 +102,7 @@ export default function OnboardingScreen() {
 
       <View style={styles.content}>
         <View style={styles.imageContainer}>
-          <Image source={step.image} style={styles.image} contentFit="contain" transition={300} />
+          <Image source={step.image} style={[styles.image, (step as any).imageStyle]} contentFit="contain" transition={300} />
         </View>
         <View style={styles.textContainer}>
           <Text style={[styles.title, { color: themeColors.text }]}>{step.title}</Text>
@@ -173,7 +175,8 @@ const styles = StyleSheet.create({
     marginTop: 60,
   },
   image: {
-    height: height * 0.7
+    width: '100%',
+    height: height * 0.7,
     // maxHeight: 350,
   },
   textContainer: {
