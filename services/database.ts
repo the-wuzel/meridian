@@ -406,7 +406,7 @@ export const exportDatabase = async () => {
         }
 
         // Copy it to a temporary location to ensure it has a good name and is accessible
-        const backupFileName = `database_backup_${new Date().toISOString().split('T')[0]}.db`;
+        const backupFileName = `meridian_backup_${new Date().toISOString().split('T')[0]}.db`;
         const backupFile = new File(Paths.cache, backupFileName);
         
         // If there's an old backup, overwrite by copying? 
