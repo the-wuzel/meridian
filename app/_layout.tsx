@@ -1,4 +1,4 @@
-import { initDatabase, seedTestData } from '@/services/database';
+import { initDatabase } from '@/services/database';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -46,7 +46,6 @@ export default function RootLayout() {
     async function prepare() {
       try {
         await initDatabase();
-        await seedTestData();
       } catch (e) {
         console.warn(e);
       } finally {

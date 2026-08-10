@@ -12,7 +12,7 @@ export function useOnboarding() {
   }, []);
 
   const checkOnboarding = async () => {
-    await AsyncStorage.removeItem('@viewed_onboarding'); // Uncommented to reset onboarding for testing
+    // await AsyncStorage.removeItem('@viewed_onboarding'); // Uncommented to reset onboarding for testing
     try {
       const value = await AsyncStorage.getItem(ONBOARDING_KEY);
       if (value !== null) {

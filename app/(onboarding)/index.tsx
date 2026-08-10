@@ -5,8 +5,8 @@ import { useOnboarding } from '@/hooks/useOnboarding';
 import { saveSetting } from '@/services/database';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { BackHandler, Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -38,16 +38,21 @@ const ONBOARDING_STEPS = [
   {
     title: 'Morning Routine',
     subtitle: 'Start your day right. Enter the app once every morning to set your intentions and prepare for the day ahead.',
-    image: require('@/assets/images/home2_cut.png'),
+    image: require('@/assets/images/morningRoutine.png'),
   },
   {
     title: 'Evening Routine',
     subtitle: 'Reflect on your progress. Check in once every evening to log your day, clear your mind, and wind down.',
+    image: require('@/assets/images/home2_cut.png'),
+  },
+  {
+    title: 'Memories',
+    subtitle: 'View your past gratitude and reflection entries organized chronologically by day. Revisit your past thoughts and track your growth.',
     image: require('@/assets/images/memories2_cut.png'),
   },
   {
     title: 'Make it Yours',
-    subtitle: 'What should we call you? We will use this to personalize your experience.',
+    subtitle: 'What should we call you? This name will be used throughout the app.',
     image: require('@/assets/images/icon_png.png'),
     imageStyle: { width: '80%', height: height * 0.5 },
     isInput: true,
@@ -63,6 +68,20 @@ export default function OnboardingScreen() {
   
   const [currentStep, setCurrentStep] = useState(0);
   const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const onBackPress = () => {
+      if (currentStep > 0) {
+        setCurrentStep((prev) => prev - 1);
+        return true;
+      }
+      return false;
+    };
+
+    const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => subscription.remove();
+  }, [currentStep]);
 
   const handleBack = () => {
     if (currentStep > 0) {

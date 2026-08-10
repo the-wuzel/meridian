@@ -7,7 +7,6 @@ import * as db from './database';
 export const runBackendTests = async (): Promise<{ passed: number, failed: number } | null> => {
     // Ensure this doesn't run in production
     if (!__DEV__) {
-        console.warn('Backend tests are restricted to development mode.');
         return null;
     }
 

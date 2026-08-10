@@ -189,26 +189,7 @@ export const getDailyPrompt = async (candidates: string[]): Promise<string> => {
 };
 
 
-// Test, remove on production
 
-export const forceNewDailyPrompt = async (candidates: string[]): Promise<string> => {
-    const now = new Date();
-    const dateKey = now.toISOString().split('T')[0];
-    const STORAGE_KEY = 'current_daily_prompt';
-    
-    const newPrompt = candidates[Math.floor(Math.random() * candidates.length)];
-
-    try {
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({
-            date: dateKey,
-            prompt: newPrompt
-        }));
-    } catch (error) {
-        console.error("Error saving daily prompt to AsyncStorage:", error);
-    }
-
-    return newPrompt;
-};
 
 import quotesData from './quotes.json';
 
@@ -493,35 +474,5 @@ export const importDatabase = async () => {
     }
 };
 
-// Test Data, delete for production
-export const seedTestData = async () => {
-    const db = await getDb();
-    
-    // Check if we already have seeded data
-    const existing = await db.getAllAsync('SELECT * FROM reflections WHERE answer LIKE "[TEST]%"');
-    if (existing.length > 0) return;
 
-    const now = new Date();
-    const reflectionsData = require('./reflection.json');
-    const reflections = reflectionsData.slice(0, 10).map((r: any) => r.prompt);
-
-    for (const prompt of reflections) {
-        // Add 2 past memories for each of these prompts
-        const d1 = new Date(now);
-        d1.setDate(d1.getDate() - 30);
-        
-        const d2 = new Date(now);
-        d2.setDate(d2.getDate() - 15);
-
-        await db.runAsync(
-            'INSERT INTO reflections (prompt, answer, date) VALUES (?, ?, ?)',
-            [prompt, "[TEST] First memory about this from a month ago.", d1.toISOString()]
-        );
-        
-        await db.runAsync(
-            'INSERT INTO reflections (prompt, answer, date) VALUES (?, ?, ?)',
-            [prompt, "[TEST] Second memory about this from two weeks ago.", d2.toISOString()]
-        );
-    }
-};
 

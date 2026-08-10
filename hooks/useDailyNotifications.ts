@@ -80,18 +80,6 @@ export function useDailyNotifications() {
         });
       }
 
-      // TEMPORARY: Test notification 5 seconds from now
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Test Notification 🚀',
-          body: "This is a test notification to verify it's working!",
-        },
-        trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-          seconds: 5,
-        },
-      });
-
     }
 
     configureNotifications();

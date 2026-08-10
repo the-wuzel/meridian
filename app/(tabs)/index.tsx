@@ -14,7 +14,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import ReorderableList, { reorderItems, useReorderableDrag } from 'react-native-reorderable-list';
 import { createStyles } from '../../styles/index.styles';
 
-import { Reflection, deleteGratitude, forceNewDailyPrompt, getDailyPrompt, getDailyQuote, getMorningRoutineItems, getPastReflectionsByPrompt, getTodayGratitudes, getTodayReflection, isQuoteSaved, removeSavedQuote, saveGratitude, saveQuote, saveReflection, syncMorningRoutineItems, updateGratitude, updateMorningRoutineItemStatus } from '@/services/database';
+import { Reflection, deleteGratitude, getDailyPrompt, getDailyQuote, getMorningRoutineItems, getPastReflectionsByPrompt, getTodayGratitudes, getTodayReflection, isQuoteSaved, removeSavedQuote, saveGratitude, saveQuote, saveReflection, syncMorningRoutineItems, updateGratitude, updateMorningRoutineItemStatus } from '@/services/database';
 import reflectionsData from '@/services/reflection.json';
 
 
@@ -524,23 +524,10 @@ function ReflectionPrompt() {
     }, [])
   );
 
-  const handleTestShuffle = async () => {
-    const newPrompt = await forceNewDailyPrompt(REFLECTIONS);
-    setReflection(newPrompt);
-    setAnswer('');
-    const past = await getPastReflectionsByPrompt(newPrompt);
-    setPastMemories(past);
-  };
-
   return (
     <ThemedView style={styles.quoteContainer}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
         <ThemedText type="subtitle" style={[styles.quoteTitle, { marginBottom: 0 }]}>Evening Reflection</ThemedText>
-        {__DEV__ && (
-          <TouchableOpacity onPress={handleTestShuffle} style={{ padding: 4 }}>
-            <IconSymbol name="arrow.triangle.2.circlepath" size={20} color={colors.textTertiary} />
-          </TouchableOpacity>
-        )}
       </View>
       <ThemedText style={styles.quoteText}>{reflection}</ThemedText>
       <TextInput
