@@ -1,5 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { File, Paths } from 'expo-file-system';
 import React from 'react';
-import { View, Button, StyleSheet, Alert } from 'react-native';
+import { Alert, Button, StyleSheet, View } from 'react-native';
 import { runBackendTests } from '../services/backendTester';
 
 /**
@@ -25,12 +27,45 @@ export default function DevBackendTester() {
         }
     };
 
+    const handleWipeData = () => {
+        Alert.alert(
+            "Wipe All Data",
+            "Are you sure you want to completely wipe the local database and AsyncStorage? You must restart the app afterward.",
+            [
+                { text: "Cancel", style: "cancel" },
+                {
+                    text: "Wipe Data",
+                    style: "destructive",
+                    onPress: async () => {
+                        try {
+                            await AsyncStorage.clear();
+                            const dbFile = new File(Paths.document, 'SQLite', 'database.db');
+                            if (dbFile.exists) {
+                                dbFile.delete();
+                            }
+                            Alert.alert("Success", "Data wiped! Please fully restart the application (e.g. press 'R' in terminal).");
+                        } catch (e) {
+                            Alert.alert("Error", `Could not wipe data: ${e}`);
+                        }
+                    }
+                }
+            ]
+        );
+    };
+
     return (
         <View style={styles.container}>
+            <View style={{ marginBottom: 8 }}>
+                <Button 
+                    title="Run Backend Tests" 
+                    onPress={handlePress} 
+                    color="#8E24AA" 
+                />
+            </View>
             <Button 
-                title="Run Backend Tests" 
-                onPress={handlePress} 
-                color="#8E24AA" 
+                title="Wipe Data" 
+                onPress={handleWipeData} 
+                color="#D32F2F" 
             />
         </View>
     );
