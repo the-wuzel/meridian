@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     fontFamily: 'PlusJakartaSans-SemiBold',
   },
   title: {
-    fontSize: 32,
-    lineHeight: 40,
+    fontSize: 36,
+    lineHeight: 44,
     fontFamily: 'Cardo-Bold',
   },
   subtitle: {
