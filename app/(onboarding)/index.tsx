@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontFamily: 'PlayfairDisplay-Bold',
+    fontFamily: 'Cardo-Bold',
     marginBottom: 16,
     textAlign: 'center',
   },

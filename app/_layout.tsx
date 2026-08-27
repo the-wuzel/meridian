@@ -38,8 +38,8 @@ export default function RootLayout() {
     'PlusJakartaSans-Regular': require('../assets/fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Regular.ttf'),
     'PlusJakartaSans-SemiBold': require('../assets/fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-SemiBold.ttf'),
     'PlusJakartaSans-Bold': require('../assets/fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Bold.ttf'),
-    'PlayfairDisplay-Regular': require('../assets/fonts/Playfair_Display/static/PlayfairDisplay-Regular.ttf'),
-    'PlayfairDisplay-Bold': require('../assets/fonts/Playfair_Display/static/PlayfairDisplay-Bold.ttf'),
+    'Cardo-Regular': require('../assets/fonts/Cardo/Cardo-Regular.ttf'),
+    'Cardo-Bold': require('../assets/fonts/Cardo/Cardo-Bold.ttf'),
   });
 
   useEffect(() => {

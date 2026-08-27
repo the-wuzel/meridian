@@ -76,7 +76,7 @@ export const Fonts = {
     bold: 'PlusJakartaSans-Bold',
   },
   accent: {
-    regular: 'PlayfairDisplay-Regular',
-    bold: 'PlayfairDisplay-Bold',
+    regular: 'Cardo-Regular',
+    bold: 'Cardo-Bold',
   }
 };

@@ -324,6 +324,23 @@ export const getSavedQuotes = async (): Promise<{ id: number, text: string, auth
 
 export const getMorningRoutineItems = async (): Promise<{ id: number, label: string, checked: boolean }[]> => {
     const db = await getDb();
+
+    // Check if we need to reset the morning routine for a new day
+    const now = new Date();
+    const dateKey = now.toISOString().split('T')[0];
+    const STORAGE_KEY = 'last_morning_routine_date';
+
+    try {
+        const storedDate = await AsyncStorage.getItem(STORAGE_KEY);
+        if (storedDate !== dateKey) {
+            // It's a new day (or first time), reset checked status
+            await db.runAsync('UPDATE morning_routines SET checked = 0');
+            await AsyncStorage.setItem(STORAGE_KEY, dateKey);
+        }
+    } catch (error) {
+        console.error("Error managing morning routine date in AsyncStorage:", error);
+    }
+
     const allRows = await db.getAllAsync<{ id: number, label: string, checked: number }>('SELECT * FROM morning_routines ORDER BY id ASC');
     return allRows.map(row => ({
         ...row,
