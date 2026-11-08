@@ -88,14 +88,13 @@ function RootLayoutContent({ hasViewedOnboarding }: { hasViewedOnboarding: boole
         {/* Render main app logic only if it's unlocked OR app lock is disabled */}
         <View style={{ flex: 1, display: isAppUnlocked ? 'flex' : 'none' }}>
            <Stack screenOptions={{ headerShown: false }}>
-             {hasViewedOnboarding ? (
-               <>
-                 <Stack.Screen name="(tabs)" />
-                 <Stack.Screen name="pin-setup" options={{ presentation: 'fullScreenModal', headerShown: false }} />
-               </>
-             ) : (
+             <Stack.Protected guard={!!hasViewedOnboarding}>
+               <Stack.Screen name="(tabs)" />
+               <Stack.Screen name="pin-setup" options={{ presentation: 'fullScreenModal', headerShown: false }} />
+             </Stack.Protected>
+             <Stack.Protected guard={!hasViewedOnboarding}>
                <Stack.Screen name="(onboarding)" />
-             )}
+             </Stack.Protected>
            </Stack>
         </View>
 

@@ -31,55 +31,64 @@ export function useDailyNotifications() {
     async function configureNotifications() {
       if (Platform.OS === 'web') return;
 
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
+      try {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
 
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
+        if (existingStatus !== 'granted') {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+
+        if (finalStatus !== 'granted') {
+          return;
+        }
+
+        if (Platform.OS === 'android') {
+          try {
+            await Notifications.setNotificationChannelAsync('daily-reminders', {
+              name: 'Daily Reminders',
+              importance: Notifications.AndroidImportance.DEFAULT,
+            });
+          } catch (channelError) {
+            console.warn('Failed to set notification channel:', channelError);
+          }
+        }
+
+        await Notifications.cancelAllScheduledNotificationsAsync();
+
+        if (morningNotificationEnabled) {
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: 'Morning Check-in ☀️',
+              body: "Take a moment to start your day with intention. How are you feeling?",
+            },
+            trigger: {
+              type: Notifications.SchedulableTriggerInputTypes.DAILY,
+              hour: morningNotificationHour,
+              minute: morningNotificationMinute,
+              channelId: 'daily-reminders',
+            } as Notifications.DailyTriggerInput,
+          });
+        }
+
+        if (eveningNotificationEnabled) {
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: 'Evening Reflection 🌙',
+              body: "Time to wind down. Reflect on your day and log your thoughts.",
+            },
+            trigger: {
+              type: Notifications.SchedulableTriggerInputTypes.DAILY,
+              hour: eveningNotificationHour,
+              minute: eveningNotificationMinute,
+              channelId: 'daily-reminders',
+            } as Notifications.DailyTriggerInput,
+          });
+        }
+      } catch (error) {
+        console.warn('Failed to configure notifications:', error);
       }
-
-      if (finalStatus !== 'granted') {
-        return;
-      }
-
-      if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync('daily-reminders', {
-          name: 'Daily Reminders',
-          importance: Notifications.AndroidImportance.DEFAULT,
-        });
-      }
-
-      await Notifications.cancelAllScheduledNotificationsAsync();
-
-      if (morningNotificationEnabled) {
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: 'Morning Check-in ☀️',
-            body: "Take a moment to start your day with intention. How are you feeling?",
-          },
-          trigger: {
-            type: Notifications.SchedulableTriggerInputTypes.DAILY,
-            hour: morningNotificationHour,
-            minute: morningNotificationMinute,
-          } as Notifications.DailyTriggerInput,
-        });
-      }
-
-      if (eveningNotificationEnabled) {
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: 'Evening Reflection 🌙',
-            body: "Time to wind down. Reflect on your day and log your thoughts.",
-          },
-          trigger: {
-            type: Notifications.SchedulableTriggerInputTypes.DAILY,
-            hour: eveningNotificationHour,
-            minute: eveningNotificationMinute,
-          } as Notifications.DailyTriggerInput,
-        });
-      }
-
     }
 
     configureNotifications();
