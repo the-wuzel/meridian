@@ -422,6 +422,12 @@ export const exportDatabase = async () => {
             dialogTitle: 'Export Database Backup'
         });
 
+        try {
+            if (backupFile.exists) {
+                backupFile.delete();
+            }
+        } catch (e) {}
+
         return true;
     } catch (error) {
         console.error("Error exporting database:", error);
@@ -480,6 +486,12 @@ export const importDatabase = async () => {
         }
         
         sourceFile.copy(dbFile);
+
+        try {
+            if (sourceFile.exists) {
+                sourceFile.delete();
+            }
+        } catch (e) {}
 
         // Re-initialize the database connection to use the imported file
         await getDb();

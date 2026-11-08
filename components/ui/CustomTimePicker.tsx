@@ -8,7 +8,7 @@ import { useSettings } from '@/context/SettingsContext';
 
 const ITEM_HEIGHT = 50;
 const VISIBLE_ITEMS = 5;
-const REPEAT_COUNT = 400; // Large number for pseudo-infinite scroll
+const REPEAT_COUNT = 40; // Sufficient for smooth pseudo-infinite scroll without huge memory arrays
 
 const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
 const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
@@ -28,8 +28,8 @@ const WheelPicker: React.FC<WheelPickerProps> = ({ items, selectedValue, onValue
     
     // Create large array for infinite scroll
     const middleGroupStart = Math.floor(REPEAT_COUNT / 2) * items.length;
-    const repeatedItems = Array(REPEAT_COUNT).fill(items).flat();
-    const paddedItems = ['', '', ...repeatedItems, '', ''];
+    const repeatedItems = React.useMemo(() => Array(REPEAT_COUNT).fill(items).flat(), [items]);
+    const paddedItems = React.useMemo(() => ['', '', ...repeatedItems, '', ''], [repeatedItems]);
     const snapOffsets = React.useMemo(() => paddedItems.map((_, i) => i * ITEM_HEIGHT), [paddedItems]);
     
     const [isEditing, setIsEditing] = useState(false);

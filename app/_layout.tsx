@@ -38,7 +38,6 @@ export default function RootLayout() {
     'PlusJakartaSans-Regular': require('../assets/fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Regular.ttf'),
     'PlusJakartaSans-SemiBold': require('../assets/fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-SemiBold.ttf'),
     'PlusJakartaSans-Bold': require('../assets/fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Bold.ttf'),
-    'Cardo-Regular': require('../assets/fonts/Cardo/Cardo-Regular.ttf'),
     'Cardo-Bold': require('../assets/fonts/Cardo/Cardo-Bold.ttf'),
   });
 
@@ -92,7 +91,6 @@ function RootLayoutContent({ hasViewedOnboarding }: { hasViewedOnboarding: boole
              {hasViewedOnboarding ? (
                <>
                  <Stack.Screen name="(tabs)" />
-                 <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal', headerShown: true }} />
                  <Stack.Screen name="pin-setup" options={{ presentation: 'fullScreenModal', headerShown: false }} />
                </>
              ) : (

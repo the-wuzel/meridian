@@ -607,7 +607,7 @@ export const createStyles = (theme: 'light' | 'dark', colors: any) => StyleSheet
         borderRadius: 8,
         paddingHorizontal: 16,
         fontSize: 16,
-        fontFamily: 'PlusJakartaSans-Medium',
+        fontFamily: 'PlusJakartaSans-Regular',
     },
     timeText: {
         fontSize: 16,

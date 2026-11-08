@@ -37,6 +37,13 @@ const MAPPING = {
   'arrow.triangle.2.circlepath': 'refresh',
   'chevron.up': 'expand-less',
   'chevron.down': 'expand-more',
+  'delete.left': 'backspace',
+  'xmark': 'close',
+  'lock.shield': 'security',
+  'faceid': 'face',
+  'hourglass': 'hourglass-empty',
+  'lock.fill': 'lock',
+  'plus': 'add',
 } as IconMapping;
 
 /**

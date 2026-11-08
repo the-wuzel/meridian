@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View, Dimensions } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
 import { useSettings } from '@/context/SettingsContext';
@@ -138,7 +138,7 @@ export default function PinSetupScreen() {
                         onPress={handleDelete}
                         activeOpacity={0.7}
                     >
-                        <MaterialCommunityIcons name="backspace-outline" size={28} color={colors.textPrimary} />
+                        <IconSymbol name="delete.left" size={28} color={colors.textPrimary} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -149,13 +149,13 @@ export default function PinSetupScreen() {
         <ThemedView style={styles.container}>
             <View style={styles.headerRow}>
                  <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                    <MaterialCommunityIcons name="close" size={28} color={colors.textPrimary} />
+                    <IconSymbol name="xmark" size={28} color={colors.textPrimary} />
                 </TouchableOpacity>
             </View>
 
             <View style={styles.content}>
                 <View style={styles.header}>
-                    <MaterialCommunityIcons name="shield-lock-outline" size={48} color={colors.primaryButton} />
+                    <IconSymbol name="lock.shield" size={48} color={colors.primaryButton} />
                     <ThemedText style={styles.title}>
                         {step === 'create' ? 'Create PIN' : 'Confirm PIN'}
                     </ThemedText>

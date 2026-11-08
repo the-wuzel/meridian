@@ -1,11 +1,11 @@
 import { useMemo, useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Alert } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { ConfirmationModal } from '@/components/ui/confirmation-modal';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
 import { useSettings } from '@/context/SettingsContext';
@@ -207,7 +207,7 @@ export function LockScreen() {
                             onPress={handleBiometricAuth}
                             activeOpacity={0.7}
                         >
-                            <MaterialCommunityIcons name="face-recognition" size={32} color={colors.textPrimary} />
+                            <IconSymbol name="faceid" size={32} color={colors.textPrimary} />
                         </TouchableOpacity>
                     ) : (
                         <View style={styles.numberButton} />
@@ -226,7 +226,7 @@ export function LockScreen() {
                         onPress={handleDelete}
                         activeOpacity={0.7}
                     >
-                        <MaterialCommunityIcons name="backspace-outline" size={28} color={colors.textPrimary} />
+                        <IconSymbol name="delete.left" size={28} color={colors.textPrimary} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -237,7 +237,7 @@ export function LockScreen() {
         return (
             <ThemedView style={styles.container}>
                 <View style={styles.content}>
-                    <MaterialCommunityIcons name="timer-sand" size={64} color={colors.primaryButton} />
+                    <IconSymbol name="hourglass" size={64} color={colors.primaryButton} />
                     <ThemedText style={styles.title}>Recovery in Progress</ThemedText>
                     <ThemedText style={styles.subtitle}>
                         You can access the app in {formatTime(recoveryTimeLeft)}
@@ -257,7 +257,7 @@ export function LockScreen() {
         <ThemedView style={styles.container}>
             <View style={styles.content}>
                 <View style={styles.header}>
-                    <MaterialCommunityIcons name="lock" size={48} color={colors.primaryButton} />
+                    <IconSymbol name="lock.fill" size={48} color={colors.primaryButton} />
                     <ThemedText style={styles.title}>Welcome Back</ThemedText>
                     <ThemedText style={styles.subtitle}>Enter your PIN to unlock</ThemedText>
                 </View>
